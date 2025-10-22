@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
-function QuestionItem({ question }) {
-  const { id, prompt, answers, correctIndex } = question;
+function QuestionItem({ question, onDelete, onUpdate }) {
+  const { id, prompt, answers } = question;
+  const [selectedIndex, setSelectedIndex] = useState(question.correctIndex);
 
-  const options = answers.map((answer, index) => (
-    <option key={index} value={index}>
-      {answer}
+  function handleDeleteClick() {
+    onDelete(id);
+  }
+
+  function handleCorrectAnswerChange(e) {
+    const newIndex = parseInt(e.target.value);
+    setSelectedIndex(newIndex); // update immediately for test DOM
+    onUpdate({ ...question, correctIndex: newIndex }); // sync backend + parent
+  }
+
+  const options = answers.map((a, i) => (
+    <option key={i} value={i}>
+      {a}
     </option>
   ));
 
@@ -15,9 +26,11 @@ function QuestionItem({ question }) {
       <h5>Prompt: {prompt}</h5>
       <label>
         Correct Answer:
-        <select defaultValue={correctIndex}>{options}</select>
+        <select value={selectedIndex} onChange={handleCorrectAnswerChange}>
+          {options}
+        </select>
       </label>
-      <button>Delete Question</button>
+      <button onClick={handleDeleteClick}>Delete Question</button>
     </li>
   );
 }
