@@ -84,11 +84,11 @@ test("updates the answer when the dropdown is changed", async () => {
 
   fireEvent.change(screen.queryAllByLabelText(/Correct Answer/)[0], {
     target: { value: "3" },
-  });
+  })
 
   expect(screen.queryAllByLabelText(/Correct Answer/)[0].value).toBe("3");
 
-  rerender(<App />);
+  rerender(<App />)
 
   expect(screen.queryAllByLabelText(/Correct Answer/)[0].value).toBe("3");
-});
+})
